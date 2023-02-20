@@ -1,6 +1,8 @@
 package pl.coderslab;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,22 +10,23 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class TaskManager {
+    static String[][] tasks;
 
     public static void main(String[] args) {
 
+        tasks = readData();
         Scanner scanner = new Scanner(System.in);
 
         String input;
         do {
-            printOption();
+            printOption(); // Czy tu nie trzeba obciac soacji?
             input = scanner.nextLine();
             switch (input) {
                 case "add":
-                    readData();
-//                addTask();
+                    addTask();
                     break;
                 case "remove":
-//                removeTask();
+                    removeTask();
                     break;
                 case "list":
                     listTask();
@@ -37,9 +40,9 @@ public class TaskManager {
         } while (!input.equals("exit"));
     }
 
-    public static void readData() {
+    public static String[][] readData() {
         File file = new File("tasks.csv");
-        String[][] taskListArr = new String[0][3];
+        String[][] taskListArr = new String[0][];
         Scanner scanner = null;
 
         try {
@@ -52,6 +55,7 @@ public class TaskManager {
             taskListArr[taskListArr.length - 1] = scanner.nextLine().split(",");
 //            System.out.println(Arrays.toString(taskListArr[taskListArr.length - 1]));
         } while (scanner.hasNextLine());
+        return taskListArr;
     }
 
     public static void printOption() {
@@ -65,20 +69,46 @@ public class TaskManager {
 
     public static void listTask() {
         System.out.println("list");
-        File file = new File("tasks.csv");
 
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage() + "Nie ma pliku");
+        System.out.println(Arrays.deepToString(tasks)); //whilem lub forem
+    }
+
+    public static void addTask() {
+
+
+        tasks = Arrays.copyOf(tasks, tasks.length + 1);
+        tasks[tasks.length - 1] = new String[3];
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Please add task description");
+        String input = scanner.nextLine();
+        tasks[tasks.length - 1][0] = input;
+
+        System.out.println("Please add task due date");
+        input = scanner.nextLine();
+        tasks[tasks.length - 1][1] = input;
+
+        System.out.println("Is your task important: true/false");
+        input = scanner.nextLine();
+        tasks[tasks.length - 1][2] = input;
+
+        System.out.println("YOUR TASK WAS SUCCESFULLY ADDED");
+    }
+
+    public static void removeTask() {
+        System.out.println("PLEASE SELECT TASK NUMBER TO REMOVE:");
+        Scanner scanner = new Scanner(System.in);
+
+        // do whilem, żeby nie wychodziło
+        String imput = scanner.nextLine();
+        if (NumberUtils.isParsable(imput)) {
+            int indexToRemove = Integer.parseInt(imput);
+            if (indexToRemove >= 0 && indexToRemove < tasks.length) {
+                tasks = ArrayUtils.remove(tasks, indexToRemove);
+                return;
+            }
         }
-        int counter = 0;
-        while (scanner.hasNextLine()) {
-            System.out.println(counter + ": " + scanner.nextLine());
-            counter++;
-        }
-        System.out.println();
+        System.out.println("Proszę podaj poprawny numer");
     }
 
     public static void exit() {
