@@ -19,7 +19,7 @@ public class TaskManager {
 
         String input;
         do {
-            printOption(); // Czy tu nie trzeba obciac soacji?
+            printOption();
             input = scanner.nextLine();
             switch (input) {
                 case "add":
@@ -52,7 +52,7 @@ public class TaskManager {
         }
         do {
             taskListArr = Arrays.copyOf(taskListArr, taskListArr.length + 1);
-            taskListArr[taskListArr.length - 1] = scanner.nextLine().split(",");
+            taskListArr[taskListArr.length - 1] = scanner.nextLine().split(","); // Czy tu nie trzeba obciac spacji jakoś? jak?
 //            System.out.println(Arrays.toString(taskListArr[taskListArr.length - 1]));
         } while (scanner.hasNextLine());
         return taskListArr;
@@ -70,7 +70,7 @@ public class TaskManager {
     public static void listTask() {
         System.out.println("list");
 
-        System.out.println(Arrays.deepToString(tasks)); //whilem lub forem
+        System.out.println(Arrays.deepToString(tasks)); //Jak to zrobić żeby poprawnie drukowało listę tj. tak jak w treści zadania?
     }
 
     public static void addTask() {
@@ -96,22 +96,25 @@ public class TaskManager {
     }
 
     public static void removeTask() {
-        System.out.println("PLEASE SELECT TASK NUMBER TO REMOVE:");
         Scanner scanner = new Scanner(System.in);
 
-        // do whilem, żeby nie wychodziło
+        // Jak to zrobić żeby nie wychodziło znów to ListTask? DO-WHILEM?
         String imput = scanner.nextLine();
-        if (NumberUtils.isParsable(imput)) {
-            int indexToRemove = Integer.parseInt(imput);
-            if (indexToRemove >= 0 && indexToRemove < tasks.length) {
-                tasks = ArrayUtils.remove(tasks, indexToRemove);
-                return;
+//        do {
+            System.out.println("PLEASE SELECT TASK NUMBER TO REMOVE:");
+            if (NumberUtils.isParsable(imput)) {
+                int indexToRemove = Integer.parseInt(imput);
+                if (indexToRemove >= 0 && indexToRemove < tasks.length) {
+                    tasks = ArrayUtils.remove(tasks, indexToRemove);
+                    return;
+                }
             }
-        }
-        System.out.println("Proszę podaj poprawny numer");
+            System.out.println("Proszę podaj poprawny numer");
+//        } while (indexToRemove < 0 || indexToRemove >= tasks.length);
     }
 
     public static void exit() {
+        // dane z tablicy mają zostać zapisane do pliku tasks.csv NIE WIEM JAK
         System.err.println("THAT'S ALL FOLKS");
     }
 }
